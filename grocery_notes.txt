@@ -1,0 +1,96 @@
+
+Client wants to know about customer behavior so they can better target their promotions..
+
+Tables
+
+Baskets(Things purchased together)
+	Basket Id, Size, Type, Price Sensitivity, Dominant Mission
+
+Customers (Each Customer, repeats tracked)
+	Cust Id, Price Sensitvity, Life Stage
+
+	N_Cust = 5000
+
+	Nulls = 617450 (Non loyalty?)
+	NonNulls = 2.5 million
+
+Products (Each Product)
+	Product Id, 10, 20, 30, 40
+	What are the prodict codes?
+
+Stores (Each store)
+	Store Id, Format, Region
+
+Timestamps (Each hour open) (2.5 years of data)
+	Time Id, Shop Week, Date_from, Date_to, Shop_date, shop_hour
+
+Transactions (Each Product)
+	Trans Id, time_id, Quantity, Spend, Prod_Id, Cust_Id, Basket_Id, Store_Id
+	Only Customers has nulls
+
+How can we look at customer behavior?
+
+A) Agg(Transaction by basket), join to cust_id, basket_id, store_id, time_id
+	Then take a sample to work with (Order by time, cust_id)
+
+WHO Purchases?
+	- How often?
+		- Consistant vs Infrequent?
+		- Amount by Frequency?
+	- Where?
+	- What?
+		- Product Groupings? (Basket Analysis)
+		- Type?
+		- Amount?
+		- Quantity?
+	- Basket Sensitivty
+	- Customer Sensitity
+	- Life Stage
+	- Loyalty vs Non loyalty
+
+1) First Clustering of 10,000 of A, sorted by time desc
+
+                                 count      mean       std       min  \
+std_quantity                    -1746.0  1.222998  0.554247  0.000000   
+nunique_products                -1746.0  1.631449  0.762669  0.000000   
+n_products                      -1746.0  1.676721  0.794965  0.199374   
+sum_spend                       -1746.0  1.421542  0.789834  0.033627   
+cust_price_sensitivity_LA       -1746.0 -0.169731 -0.038253  0.000000   
+cust_price_sensitivity_MM       -1746.0 -0.017625 -0.011134  0.000000   
+cust_price_sensitivity_UM       -1746.0  0.192693  0.051433  0.000000   
+cust_price_sensitivity_XX       -1746.0 -0.005336 -0.072867  0.000000   
+cust_lifestage_OA               -1746.0  0.065395  0.089934  0.000000   
+cust_lifestage_OF               -1746.0  0.076416  0.169536  0.000000   
+cust_lifestage_OT               -1746.0 -0.318329 -0.007168  0.000000   
+cust_lifestage_PE               -1746.0 -0.001779 -0.042145  0.000000   
+cust_lifestage_YA               -1746.0  0.174387  0.164855  0.000000   
+cust_lifestage_YF               -1746.0  0.031395  0.030640  0.000000   
+basket_size_L                   -1746.0  0.972660  0.145042  0.000000   
+basket_size_M                   -1746.0 -0.564121 -0.329431  0.000000   
+basket_size_S                   -1746.0 -0.408538 -0.491636  0.000000   
+basket_price_sensitivity_LA     -1746.0  0.024618  0.015735  0.000000   
+basket_price_sensitivity_MM     -1746.0 -0.012452 -0.000079  0.000000   
+basket_price_sensitivity_UM     -1746.0  0.018052  0.010008  0.000000   
+basket_price_sensitivity_XX     -1746.0 -0.030218 -0.148099  0.000000   
+basket_type_Full Shop           -1746.0  0.334358  0.471910  0.000000   
+basket_type_Small Shop          -1746.0 -0.772614 -0.188653  0.000000   
+basket_type_Top Up              -1746.0  0.473218  0.127586  0.000000   
+basket_type_XX                  -1746.0 -0.034962 -0.160468  0.000000   
+basket_dominant_mission_Fresh   -1746.0 -0.015554  0.001117  0.000000   
+basket_dominant_mission_Grocery -1746.0 -0.107432 -0.124773  0.000000   
+basket_dominant_mission_Mixed   -1746.0  0.248264  0.132555  0.000000   
+basket_dominant_mission_Nonfood -1746.0 -0.090316 -0.235652  0.000000   
+basket_dominant_mission_XX      -1746.0 -0.034962 -0.160468  0.000000   
+store_format_LS                 -1746.0  0.093041 -0.001163  0.000000   
+store_format_MS                 -1746.0  0.034120  0.026546  0.000000   
+store_format_SS                 -1746.0 -0.192297 -0.125607  0.000000   
+store_format_XLS                -1746.0  0.065136  0.118668  0.000000    
+
+
+Product Heirarchy, see csv
+
+
+cust_price_sensitivity_XX   
+basket_dominant_mission_XX   
+basket_price_sensitivity_XX 
+basket_type_XX   
